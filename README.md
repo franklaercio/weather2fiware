@@ -2,6 +2,8 @@
 
 A Kotlin-based service that fetches weather forecast data from Open-Meteo and publishes it to FIWARE using the Orion Context Broker. This enables real-time integration of weather data into smart applications and dashboards (via QuantumLeap + CrateDB + Grafana).
 
+![Dashboard](assets/dash.png)
+
 ## 🧩 Stack
 
 - **Orion Context Broker** – Core FIWARE component for managing context information.
