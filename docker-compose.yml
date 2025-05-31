@@ -1,5 +1,3 @@
-version: "3.8"
-
 services:
   grafana:
     image: grafana/grafana:latest
@@ -63,6 +61,38 @@ services:
       - "27017:27017"
     volumes:
       - mongo_data:/data/db
+    networks:
+      - fiware
+    restart: unless-stopped
+
+  init-subscriptions:
+    image: curlimages/curl:latest
+    container_name: init-subscriptions
+    depends_on:
+      - orion
+      - quantumleap
+    entrypoint: [ "sh", "-c", "sleep 10 && sh /create_subscriptions.sh" ]
+    volumes:
+      - ./create_subscriptions.sh:/create_subscriptions.sh
+    networks:
+      - fiware
+    restart: "no"
+
+  weather-app:
+    build:
+      context: .
+    depends_on:
+      - orion
+      - quantumleap
+      - crate
+      - init-subscriptions
+    environment:
+      - PORT=8080
+      - SPRING_PROFILES_ACTIVE=production
+      - WEATHER_API_URL=https://api.open-meteo.com/v1
+      - ORION_API_URL=http://orion:1026
+    ports:
+      - "8080:8080"
     networks:
       - fiware
     restart: unless-stopped

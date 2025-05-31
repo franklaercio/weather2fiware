@@ -7,7 +7,7 @@ create_subscription() {
 
   echo "Creating subscription for service: $SERVICE"
 
-  curl -X POST http://localhost:1026/v2/subscriptions \
+  curl -X POST http://orion:1026/v2/subscriptions \
     -H "Content-Type: application/json" \
     -H "Fiware-Service: $SERVICE" \
     -H "Fiware-ServicePath: $SERVICE_PATH" \
