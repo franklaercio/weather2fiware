@@ -3,13 +3,13 @@ WORKDIR /app
 
 COPY . .
 
-RUN gradle clean build -x test
+RUN gradle clean bootJar -x test --no-daemon
 
-FROM eclipse-temurin:21 as jre-build
+FROM eclipse-temurin:21-alpine as jre-build
+
 WORKDIR /app
+COPY --from=builder /app/build/libs/*.jar app.jar
 
 EXPOSE 8080
-
-COPY --from=builder /app/build/libs/*.jar app.jar
 
 ENTRYPOINT ["java", "-jar", "app.jar"]
